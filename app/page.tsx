@@ -95,10 +95,8 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center space-x-2"
             >
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🕉</span>
-              </div>
-              <span className="text-2xl font-bold text-orange-600">Divine Store</span>
+              <img src="/evirtue.svg" alt="" />
+              <span className="text-2xl font-bold text-orange-600 flex flex-col">E-Sanskriti <span className=" font-medium text-xs text-orange-700">By Service Brands Tech Inc.</span></span>
             </motion.div>
 
             <nav className="hidden md:flex items-center space-x-8">
@@ -176,14 +174,14 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <Image
-                src="/placeholder.svg?height=500&width=500"
+              <img
+                src="https://e-sanskriti.s3.us-east-1.amazonaws.com/Books.webp"
                 alt="Divine Products"
                 width={500}
                 height={500}
                 className="rounded-lg shadow-2xl"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div>
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg"></div> */}
             </motion.div>
           </div>
         </div>

@@ -234,8 +234,8 @@ export default function CheckoutPage() {
                       <Checkbox
                         id="saveInfo"
                         checked={formData.saveInfo}
-                        onCheckedChange={(checked) =>
-                          setFormData((prev) => ({ ...prev, saveInfo: checked as boolean }))
+                        onCheckedChange={(checked: boolean) =>
+                          setFormData((prev) => ({ ...prev, saveInfo: checked }))
                         }
                       />
                       <Label htmlFor="saveInfo" className="text-sm">
