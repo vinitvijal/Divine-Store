@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { Search, ShoppingCart, User, Menu, Star, Heart, ArrowRight } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
@@ -14,22 +13,22 @@ import { Badge } from "@/components/ui/badge"
 
 
 const categories = [
-  { id: 1, name: "Idols & Statues", image: "/placeholder.svg?height=200&width=200", count: 45 },
-  { id: 2, name: "Puja Items", image: "/placeholder.svg?height=200&width=200", count: 78 },
-  { id: 3, name: "Incense & Dhoop", image: "/placeholder.svg?height=200&width=200", count: 32 },
-  { id: 4, name: "Books & Scriptures", image: "/placeholder.svg?height=200&width=200", count: 56 },
-  { id: 5, name: "Jewelry & Accessories", image: "/placeholder.svg?height=200&width=200", count: 23 },
-  { id: 6, name: "Home Decor", image: "/placeholder.svg?height=200&width=200", count: 41 },
+  { id: 1, name: "Idols & Statues", image: "https://www.lamuse.in/cdn/shop/files/EmptyName43_9d19ea9e-1fdd-4ce3-9988-32ca4081ee5a.jpg?v=1702379788&width=1946", count: 45 },
+  { id: 2, name: "Puja Items", image: "https://neevsoaps.com/cdn/shop/products/12-1536x1024.jpg?v=1642439392", count: 78 },
+  { id: 3, name: "Incense & Dhoop", image: "https://prokart.co/wp-content/uploads/2023/02/agarbattu1200-430x287.jpg", count: 32 },
+  { id: 4, name: "Books & Scriptures", image: "https://rukminim2.flixcart.com/image/850/1000/l3929ow0/regionalbooks/b/a/f/shreemad-bhagwat-geeta-original-imageeufsk4ds57y.jpeg?q=90&crop=false", count: 56 },
+  { id: 5, name: "Jewelry & Accessories", image: "https://m.media-amazon.com/images/I/41AqIMHThsL._AC_UF1000,1000_QL80_.jpg", count: 23 },
+  { id: 6, name: "Home Decor", image: "https://www.mystore.in/s/62ea2c599d1398fa16dbae0a/66236a67f8ba13189d10eb7e/0010.JPG", count: 41 },
 ]
 
 
 const featuredProducts = [
   {
     id: 1,
-    name: "Brass Ganesha Idol",
+    name: "Brass Krishna Idol",
     price: 2499,
     originalPrice: 3499,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://www.statuestudio.com/cdn/shop/files/Brass_Hindu_God_Deity_Lord_Krishna_With_Flute_For_Pooja_Religious_Decor_Idol_13_Inch36000.jpg?v=1732367279",
     rating: 4.8,
     reviews: 124,
     featured: true,
@@ -39,7 +38,7 @@ const featuredProducts = [
     name: "Sandalwood Incense Sticks",
     price: 299,
     originalPrice: 399,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://m.media-amazon.com/images/I/81puYfV4SZL.jpg",
     rating: 4.6,
     reviews: 89,
     featured: true,
@@ -49,7 +48,7 @@ const featuredProducts = [
     name: "Bhagavad Gita (Sanskrit)",
     price: 599,
     originalPrice: 799,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://ombooks.com/wp-content/uploads/2024/06/9788119750603.jpg",
     rating: 4.9,
     reviews: 156,
     featured: true,
@@ -59,7 +58,7 @@ const featuredProducts = [
     name: "Silver Rudraksha Mala",
     price: 1899,
     originalPrice: 2499,
-    image: "/placeholder.svg?height=300&width=300",
+    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS-bampNAZdWdWisgHMvY6f4ygDdqeUTPNcMwUFSfDehr4jJzR0tHJtSwsCWTUbnJy7u4HAiFWESNFUIgj7KJSSLPIN80TeIcjIM6goUJw",
     rating: 4.7,
     reviews: 67,
     featured: true,
@@ -161,7 +160,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-orange-600"
+                  className=" text-zinc-700 bg-yellow-300 hover:bg-white hover:text-orange-600"
                 >
                   View Categories
                 </Button>
@@ -215,13 +214,13 @@ export default function Home() {
                 <Link href={`/category/${category.id}`}>
                   <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-b from-orange-50 to-yellow-50">
                     <CardContent className="p-6 text-center">
-                      <div className="relative mb-4">
-                        <Image
+                      <div className="relative mb-4 h-52 flex items-center justify-center">
+                        <img
                           src={category.image || "/placeholder.svg"}
                           alt={category.name}
                           width={120}
                           height={120}
-                          className="mx-auto rounded-full group-hover:scale-110 transition-transform duration-300"
+                          className="mx-auto rounded-sm w-full group-hover:scale-110 transition-transform duration-300"
                         />
                       </div>
                       <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
@@ -265,7 +264,7 @@ export default function Home() {
                 <Link href={`/product/${product.id}`}>
                   <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white overflow-hidden">
                     <div className="relative">
-                      <Image
+                      <img
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
                         width={300}
@@ -345,10 +344,8 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold">🕉</span>
-                </div>
-                <span className="text-xl font-bold">Iskcon Red Deer</span>
+                <img src="/evirtue.svg" className="h-16" alt="" />
+                <span className="text-xl font-bold">E-Sanskriti</span>
               </div>
               <p className="text-gray-400 mb-4">
                 Your trusted source for authentic spiritual products and divine blessings.
