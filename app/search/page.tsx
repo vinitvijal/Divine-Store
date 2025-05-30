@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Search, ShoppingCart, User, Star, Heart } from "lucide-react"
+import { Search, Star, Heart } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
@@ -75,16 +75,11 @@ const allProducts = [
 ]
 
 export default function SearchPage() {
-  const [cartCount, setCartCount] = useState(0)
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredProducts, setFilteredProducts] = useState(allProducts)
   const [sortBy, setSortBy] = useState("relevance")
   const [selectedCategory, setSelectedCategory] = useState("all")
 
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    setCartCount(cart.reduce((sum: number, item: { id: number; quantity: number }) => sum + item.quantity, 0))
-  }, [])
 
   useEffect(() => {
     let filtered = allProducts
@@ -146,7 +141,6 @@ export default function SearchPage() {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart))
-    setCartCount(cart.reduce((sum: number, item) => sum + item.quantity, 0))
   }
 
   const categories = [
@@ -160,46 +154,7 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🕉</span>
-              </div>
-              <span className="text-2xl font-bold text-orange-600">Divine Store</span>
-            </Link>
-
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Home
-              </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Categories
-              </Link>
-              <Link href="/search" className="text-orange-600 font-semibold">
-                Search
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-orange-600 transition-colors">
-                About
-              </Link>
-            </nav>
-
-            <div className="flex items-center space-x-4">
-              <Link href="/cart" className="relative">
-                <ShoppingCart className="w-6 h-6 text-gray-700 hover:text-orange-600 transition-colors" />
-                {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs">{cartCount}</Badge>
-                )}
-              </Link>
-              <Link href="/admin">
-                <User className="w-6 h-6 text-gray-700 hover:text-orange-600 transition-colors" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Search Header */}
       <section className="bg-gradient-to-r from-orange-600 to-red-500 text-white py-8">
