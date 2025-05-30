@@ -1,13 +1,14 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Search, ShoppingCart, User, Menu, Star, Heart, ArrowRight } from "lucide-react"
+import { Search, ShoppingCart, Menu, Star, Heart, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { UserButton } from "@clerk/nextjs"
 
 
 
@@ -126,9 +127,10 @@ export default function Home() {
                 )}
               </Link>
 
-              <Link href="/admin">
+                <UserButton />
+              {/* <Link href="/admin">
                 <User className="w-6 h-6 text-gray-700 hover:text-orange-600 transition-colors" />
-              </Link>
+              </Link> */}
 
               <Button variant="ghost" size="sm" className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                 <Menu className="w-6 h-6" />
