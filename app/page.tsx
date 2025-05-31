@@ -22,48 +22,48 @@ const categories = [
 
 
 
-const featuredProducts = [
-  {
-    id: 1,
-    name: "Brass Krishna Idol",
-    price: 2499,
-    originalPrice: 3499,
-    image: "https://www.statuestudio.com/cdn/shop/files/Brass_Hindu_God_Deity_Lord_Krishna_With_Flute_For_Pooja_Religious_Decor_Idol_13_Inch36000.jpg?v=1732367279",
-    rating: 4.8,
-    reviews: 124,
-    featured: true,
-  },
-  {
-    id: 2,
-    name: "Sandalwood Incense Sticks",
-    price: 299,
-    originalPrice: 399,
-    image: "https://m.media-amazon.com/images/I/81puYfV4SZL.jpg",
-    rating: 4.6,
-    reviews: 89,
-    featured: true,
-  },
-  {
-    id: 3,
-    name: "Bhagavad Gita (Sanskrit)",
-    price: 599,
-    originalPrice: 799,
-    image: "https://ombooks.com/wp-content/uploads/2024/06/9788119750603.jpg",
-    rating: 4.9,
-    reviews: 156,
-    featured: true,
-  },
-  {
-    id: 4,
-    name: "Silver Rudraksha Mala",
-    price: 1899,
-    originalPrice: 2499,
-    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS-bampNAZdWdWisgHMvY6f4ygDdqeUTPNcMwUFSfDehr4jJzR0tHJtSwsCWTUbnJy7u4HAiFWESNFUIgj7KJSSLPIN80TeIcjIM6goUJw",
-    rating: 4.7,
-    reviews: 67,
-    featured: true,
-  },
-]
+// const featuredProducts = [
+//   {
+//     id: 1,
+//     name: "Brass Krishna Idol",
+//     price: 2499,
+//     originalPrice: 3499,
+//     image: "https://www.statuestudio.com/cdn/shop/files/Brass_Hindu_God_Deity_Lord_Krishna_With_Flute_For_Pooja_Religious_Decor_Idol_13_Inch36000.jpg?v=1732367279",
+//     rating: 4.8,
+//     reviews: 124,
+//     featured: true,
+//   },
+//   {
+//     id: 2,
+//     name: "Sandalwood Incense Sticks",
+//     price: 299,
+//     originalPrice: 399,
+//     image: "https://m.media-amazon.com/images/I/81puYfV4SZL.jpg",
+//     rating: 4.6,
+//     reviews: 89,
+//     featured: true,
+//   },
+//   {
+//     id: 3,
+//     name: "Bhagavad Gita (Sanskrit)",
+//     price: 599,
+//     originalPrice: 799,
+//     image: "https://ombooks.com/wp-content/uploads/2024/06/9788119750603.jpg",
+//     rating: 4.9,
+//     reviews: 156,
+//     featured: true,
+//   },
+//   {
+//     id: 4,
+//     name: "Silver Rudraksha Mala",
+//     price: 1899,
+//     originalPrice: 2499,
+//     image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcS-bampNAZdWdWisgHMvY6f4ygDdqeUTPNcMwUFSfDehr4jJzR0tHJtSwsCWTUbnJy7u4HAiFWESNFUIgj7KJSSLPIN80TeIcjIM6goUJw",
+//     rating: 4.7,
+//     reviews: 67,
+//     featured: true,
+//   },
+// ]
 
 
 
@@ -203,7 +203,7 @@ export default function Home() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product, index) => (
+            {featuredProds && featuredProds.map((product, index) => (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -216,7 +216,7 @@ export default function Home() {
                   <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white overflow-hidden">
                     <div className="relative">
                       <img
-                        src={product.image || "/placeholder.svg"}
+                        src={product.photoUrl || "/placeholder.svg"}
                         alt={product.name}
                         width={300}
                         height={300}
@@ -227,9 +227,9 @@ export default function Home() {
                           <Heart className="w-4 h-4" />
                         </Button>
                       </div>
-                      {product.originalPrice > product.price && (
+                      { product.markedPrice && parseFloat(product.markedPrice) > parseFloat(product.price) && (
                         <Badge className="absolute top-4 left-4 bg-red-500">
-                          {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                          {Math.round(((parseFloat(product.markedPrice) - parseFloat(product.price)) / parseFloat(product.markedPrice)) * 100)}% OFF
                         </Badge>
                       )}
                     </div>
@@ -245,19 +245,19 @@ export default function Home() {
                             <Star
                               key={i}
                               className={`w-4 h-4 ${
-                                i < Math.floor(product.rating) ? "text-yellow-400 fill-current" : "text-gray-300"
+                                i < Math.floor(4.5) ? "text-yellow-400 fill-current" : "text-gray-300"
                               }`}
                             />
                           ))}
                         </div>
-                        <span className="text-sm text-gray-500 ml-2">({product.reviews})</span>
+                        <span className="text-sm text-gray-500 ml-2">({"120"})</span>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
                           <span className="text-2xl font-bold text-orange-600">₹{product.price}</span>
-                          {product.originalPrice > product.price && (
-                            <span className="text-sm text-gray-500 line-through">₹{product.originalPrice}</span>
+                          {product.markedPrice && parseFloat(product.markedPrice) > parseFloat(product.price) && (
+                            <span className="text-sm text-gray-500 line-through">₹{product.markedPrice}</span>
                           )}
                         </div>
                         <Button size="sm" className="bg-orange-500 hover:bg-orange-600">
@@ -289,91 +289,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <img src="/evirtue.svg" className="h-16" alt="" />
-                <span className="text-xl font-bold">E-Sanskriti</span>
-              </div>
-              <p className="text-gray-400 mb-4">
-                Your trusted source for authentic spiritual products and divine blessings.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/" className="hover:text-white transition-colors">
-                    Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/categories" className="hover:text-white transition-colors">
-                    Categories
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/search" className="hover:text-white transition-colors">
-                    Search
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className="hover:text-white transition-colors">
-                    About Us
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Customer Care</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>
-                  <Link href="/contact" className="hover:text-white transition-colors">
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/shipping" className="hover:text-white transition-colors">
-                    Shipping Info
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/returns" className="hover:text-white transition-colors">
-                    Returns
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/faq" className="hover:text-white transition-colors">
-                    FAQ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Connect With Us</h3>
-              <p className="text-gray-400 mb-4">Follow us for daily spiritual inspiration and product updates.</p>
-              <div className="flex space-x-4">
-                <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">
-                  Facebook
-                </Button>
-                <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">
-                  Instagram
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Service Brands Tech Inc. All rights reserved. Made with devotion and love.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

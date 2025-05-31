@@ -20,3 +20,17 @@ export async function getFeaturedProducts(sellerId: number) {
     // throw new Error("Failed to fetch featured products")
   }
 }
+
+export async function getCategories(count: number) {
+  try {
+    const categories = await prisma.category.findMany({
+      take: count
+    })
+
+    return categories
+    
+  } catch (error) {
+    console.error("Error fetching top categories:", error)
+    // throw new Error("Failed to fetch top categories")
+  }
+}
