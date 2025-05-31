@@ -20,7 +20,6 @@ model User {
   id             Int       @id @default(autoincrement())
   name           String
   email          String    @unique
-  passwordHash   String
   phoneNumber    String?
   address        String?
   role           String    @default("customer") // customer, admin, seller
@@ -36,10 +35,14 @@ model Product {
   id             Int       @id @default(autoincrement())
   name           String
   description    String?
-  price          Decimal
+  markedPrice    String?  // Optional marked price for discounts
+  price          String
   stockQuantity  Int
   createdAt      DateTime  @default(now())
-
+  photoUrl       String?
+  photoUrls      String[]  @default([]) // Array of URLs for multiple product images
+  isActive       Boolean   @default(true) // Indicates if the product is active for sale
+  isFeatured     Boolean   @default(false) // Indicates if the product is featured
   categoryId     Int?
   category       Category? @relation(fields: [categoryId], references: [id])
 
@@ -55,6 +58,7 @@ model Category {
   id        Int        @id @default(autoincrement())
   name      String
   parentId  Int?
+  photoUrl  String?
   parent    Category?  @relation("CategoryToSub", fields: [parentId], references: [id])
   sub       Category[] @relation("CategoryToSub")
   products  Product[]

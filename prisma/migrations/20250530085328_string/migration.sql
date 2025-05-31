@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "price" SET DATA TYPE TEXT,
+ALTER COLUMN "markedPrice" SET DATA TYPE TEXT;

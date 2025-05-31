@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react"
+import { Product } from "@/lib/generated/prisma"
+import { getFeaturedProducts } from "@/actions/products"
 
 const categories = [
   { id: 1, name: "Idols & Statues", image: "https://www.lamuse.in/cdn/shop/files/EmptyName43_9d19ea9e-1fdd-4ce3-9988-32ca4081ee5a.jpg?v=1702379788&width=1946", count: 45 },
@@ -16,6 +19,7 @@ const categories = [
   { id: 5, name: "Jewelry & Accessories", image: "https://m.media-amazon.com/images/I/41AqIMHThsL._AC_UF1000,1000_QL80_.jpg", count: 23 },
   { id: 6, name: "Home Decor", image: "https://www.mystore.in/s/62ea2c599d1398fa16dbae0a/66236a67f8ba13189d10eb7e/0010.JPG", count: 41 },
 ]
+
 
 
 const featuredProducts = [
@@ -67,7 +71,17 @@ const featuredProducts = [
 
 export default function Home() {
 
+  const [featuredProds, setFeaturedProds] = useState<Product[]>()
 
+
+  useEffect(() => {
+    async function fetchFeaturedProducts() {
+      const res = await getFeaturedProducts(1)
+      setFeaturedProds(res)
+      console.log(res)
+    }
+    fetchFeaturedProducts()
+  }, [])
 
 
 
