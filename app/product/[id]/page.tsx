@@ -1,49 +1,51 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ShoppingCart, User, Star, Heart, Minus, Plus, Truck, Shield, RotateCcw } from "lucide-react"
+import { Star, Heart, Minus, Plus, Truck, Shield, RotateCcw } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getProductById } from "@/actions/products"
+import { Product } from "@/lib/generated/prisma"
 
-const product = {
-  id: 1,
-  name: "Brass Ganesha Idol",
-  price: 2499,
-  originalPrice: 3499,
-  images: [
-    "/placeholder.svg?height=500&width=500",
-    "/placeholder.svg?height=500&width=500",
-    "/placeholder.svg?height=500&width=500",
-    "/placeholder.svg?height=500&width=500",
-  ],
-  rating: 4.8,
-  reviews: 124,
-  category: "Idols & Statues",
-  description:
-    "This exquisite brass Ganesha idol is handcrafted by skilled artisans with intricate details. Lord Ganesha, the remover of obstacles and patron of arts and sciences, brings prosperity and good fortune to your home. Made from high-quality brass with antique finish.",
-  features: [
-    "Handcrafted by skilled artisans",
-    "High-quality brass construction",
-    "Antique finish for authentic look",
-    "Perfect for home temple or office",
-    "Brings prosperity and removes obstacles",
-  ],
-  specifications: {
-    Material: "Brass",
-    Height: "6 inches",
-    Width: "4 inches",
-    Weight: "800 grams",
-    Finish: "Antique Brass",
-    Origin: "India",
-  },
-  inStock: true,
-  stockCount: 15,
-}
+// const product = {
+//   id: 1,
+//   name: "Brass Ganesha Idol",
+//   price: 2499,
+//   originalPrice: 3499,
+//   images: [
+//     "/placeholder.svg?height=500&width=500",
+//     "/placeholder.svg?height=500&width=500",
+//     "/placeholder.svg?height=500&width=500",
+//     "/placeholder.svg?height=500&width=500",
+//   ],
+//   rating: 4.8,
+//   reviews: 124,
+//   category: "Idols & Statues",
+//   description:
+//     "This exquisite brass Ganesha idol is handcrafted by skilled artisans with intricate details. Lord Ganesha, the remover of obstacles and patron of arts and sciences, brings prosperity and good fortune to your home. Made from high-quality brass with antique finish.",
+//   features: [
+//     "Handcrafted by skilled artisans",
+//     "High-quality brass construction",
+//     "Antique finish for authentic look",
+//     "Perfect for home temple or office",
+//     "Brings prosperity and removes obstacles",
+//   ],
+//   specifications: {
+//     Material: "Brass",
+//     Height: "6 inches",
+//     Width: "4 inches",
+//     Weight: "800 grams",
+//     Finish: "Antique Brass",
+//     Origin: "India",
+//   },
+//   inStock: true,
+//   stockCount: 15,
+// }
 
 const relatedProducts = [
   {
@@ -72,15 +74,29 @@ const relatedProducts = [
   },
 ]
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const [cartCount, setCartCount] = useState(0)
+export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+  
+  const { id } = use(params);
+  // const [cartCount, setCartCount] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [product, setCurrentProduct] = useState<Product>()
+  
+    
+    
+
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0))
+     async function fetchProduct() {
+        const res = await getProductById(parseInt(id), 1)
+        if (res){
+            setCurrentProduct(res)
+        } else { 
+            console.error("Product not found")
+        }
+      }
+    fetchProduct()
   }, [])
 
   const addToCart = () => {
@@ -97,48 +113,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     setCartCount(cart.reduce((sum: number, item: any) => sum + item.quantity, 0))
   }
 
+  if(product)
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-yellow-50">
-      {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🕉</span>
-              </div>
-              <span className="text-2xl font-bold text-orange-600">Divine Store</span>
-            </Link>
-
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Home
-              </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Categories
-              </Link>
-              <Link href="/search" className="text-gray-700 hover:text-orange-600 transition-colors">
-                Search
-              </Link>
-              <Link href="/about" className="text-gray-700 hover:text-orange-600 transition-colors">
-                About
-              </Link>
-            </nav>
-
-            <div className="flex items-center space-x-4">
-              <Link href="/cart" className="relative">
-                <ShoppingCart className="w-6 h-6 text-gray-700 hover:text-orange-600 transition-colors" />
-                {cartCount > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs">{cartCount}</Badge>
-                )}
-              </Link>
-              <Link href="/admin">
-                <User className="w-6 h-6 text-gray-700 hover:text-orange-600 transition-colors" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+ 
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -152,11 +130,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               Categories
             </Link>
             <span className="mx-2">/</span>
-            <Link href={`/category/${product.category}`} className="hover:text-orange-600">
-              {product.category}
+            <Link href={`/category/${product?.categoryId}`} className="hover:text-orange-600">
+              {product?.categoryId}
             </Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-800">{product.name}</span>
+            <span className="text-gray-800">{product?.name}</span>
           </nav>
         </div>
       </div>
@@ -169,22 +147,22 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               <div className="space-y-4">
                 <div className="relative">
-                  <Image
-                    src={product.images[selectedImage] || "/placeholder.svg"}
-                    alt={product.name}
+                  <img
+                    src={[product.photoUrl ,...product.photoUrls][selectedImage] || "/placeholder.svg"}
+                    alt={product?.name || "Product Image"}
                     width={500}
                     height={500}
-                    className="w-full h-96 object-cover rounded-lg shadow-lg"
+                    className="w-full h-96 object-contain rounded-lg shadow-lg"
                   />
-                  {product.originalPrice > product.price && (
+                  {product?.markedPrice && parseFloat(product?.markedPrice) > parseFloat(product?.price) && (
                     <Badge className="absolute top-4 left-4 bg-red-500 text-white">
-                      {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                      {Math.round(((parseFloat(product.markedPrice) - parseFloat(product.price)) / parseFloat(product.markedPrice)) * 100)}% OFF
                     </Badge>
                   )}
                 </div>
 
                 <div className="grid grid-cols-4 gap-2">
-                  {product.images.map((image, index) => (
+                  {[product.photoUrl,...product.photoUrls].map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
@@ -192,7 +170,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                         selectedImage === index ? "border-orange-500" : "border-gray-200"
                       }`}
                     >
-                      <Image
+                      <img
                         src={image || "/placeholder.svg"}
                         alt={`${product.name} ${index + 1}`}
                         width={100}
@@ -220,20 +198,20 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                       <Star
                         key={i}
                         className={`w-5 h-5 ${
-                          i < Math.floor(product.rating) ? "text-yellow-400 fill-current" : "text-gray-300"
+                          i < Math.floor(4.2) ? "text-yellow-400 fill-current" : "text-gray-300"
                         }`}
                       />
                     ))}
                   </div>
-                  <span className="text-gray-600">({product.reviews} reviews)</span>
-                  <Badge variant="secondary">{product.category}</Badge>
+                  <span className="text-gray-600">({120} reviews)</span>
+                  <Badge variant="secondary">{product.categoryId}</Badge>
                 </div>
               </div>
 
               <div className="flex items-center space-x-4">
                 <span className="text-4xl font-bold text-orange-600">₹{product.price}</span>
-                {product.originalPrice > product.price && (
-                  <span className="text-2xl text-gray-500 line-through">₹{product.originalPrice}</span>
+                {product.markedPrice && parseFloat(product.markedPrice) > parseFloat(product.price) && (
+                  <span className="text-2xl text-gray-500 line-through">₹{product.markedPrice}</span>
                 )}
               </div>
 
@@ -256,12 +234,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                       variant="ghost"
                       size="sm"
                       onClick={() => setQuantity(quantity + 1)}
-                      disabled={quantity >= product.stockCount}
+                      disabled={quantity >= product.stockQuantity
+                      }
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
                   </div>
-                  <span className="text-sm text-gray-500">({product.stockCount} in stock)</span>
+                  <span className="text-sm text-gray-500">({product.stockQuantity} in stock)</span>
                 </div>
 
                 <div className="flex space-x-4">
@@ -318,9 +297,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <p className="text-gray-600 mb-4">{product.description}</p>
                   <h4 className="font-semibold mb-2">Key Features:</h4>
                   <ul className="list-disc list-inside space-y-1 text-gray-600">
-                    {product.features.map((feature, index) => (
+                    {/* {product.features.map((feature, index) => (
                       <li key={index}>{feature}</li>
-                    ))}
+                    ))} */}
                   </ul>
                 </CardContent>
               </Card>
@@ -331,12 +310,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold mb-4">Specifications</h3>
                   <div className="space-y-3">
-                    {Object.entries(product.specifications).map(([key, value]) => (
+                    {/* {Object.entries(product.specifications).map(([key, value]) => (
                       <div key={key} className="flex justify-between py-2 border-b border-gray-100">
                         <span className="font-medium text-gray-700">{key}:</span>
                         <span className="text-gray-600">{value}</span>
                       </div>
-                    ))}
+                    ))} */}
                   </div>
                 </CardContent>
               </Card>
@@ -354,7 +333,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                             <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                           ))}
                         </div>
-                        <span className="ml-2 font-semibold">Rajesh Kumar</span>
+                        {<span className="ml-2 font-semibold">Rajesh Kumar</span>}
                         <span className="ml-auto text-sm text-gray-500">2 days ago</span>
                       </div>
                       <p className="text-gray-600">
@@ -393,7 +372,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white overflow-hidden"
               >
                 <Link href={`/product/${relatedProduct.id}`}>
-                  <Image
+                  <img
                     src={relatedProduct.image || "/placeholder.svg"}
                     alt={relatedProduct.name}
                     width={200}

@@ -9,16 +9,16 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useEffect, useState } from "react"
 import { Product } from "@/lib/generated/prisma"
-import { getFeaturedProducts } from "@/actions/products"
+import { getCategories, getFeaturedProducts } from "@/actions/products"
 
-const categories = [
-  { id: 1, name: "Idols & Statues", image: "https://www.lamuse.in/cdn/shop/files/EmptyName43_9d19ea9e-1fdd-4ce3-9988-32ca4081ee5a.jpg?v=1702379788&width=1946", count: 45 },
-  { id: 2, name: "Puja Items", image: "https://neevsoaps.com/cdn/shop/products/12-1536x1024.jpg?v=1642439392", count: 78 },
-  { id: 3, name: "Incense & Dhoop", image: "https://prokart.co/wp-content/uploads/2023/02/agarbattu1200-430x287.jpg", count: 32 },
-  { id: 4, name: "Books & Scriptures", image: "https://rukminim2.flixcart.com/image/850/1000/l3929ow0/regionalbooks/b/a/f/shreemad-bhagwat-geeta-original-imageeufsk4ds57y.jpeg?q=90&crop=false", count: 56 },
-  { id: 5, name: "Jewelry & Accessories", image: "https://m.media-amazon.com/images/I/41AqIMHThsL._AC_UF1000,1000_QL80_.jpg", count: 23 },
-  { id: 6, name: "Home Decor", image: "https://www.mystore.in/s/62ea2c599d1398fa16dbae0a/66236a67f8ba13189d10eb7e/0010.JPG", count: 41 },
-]
+// const categories = [
+//   { id: 1, name: "Idols & Statues", image: "https://www.lamuse.in/cdn/shop/files/EmptyName43_9d19ea9e-1fdd-4ce3-9988-32ca4081ee5a.jpg?v=1702379788&width=1946", count: 45 },
+//   { id: 2, name: "Puja Items", image: "https://neevsoaps.com/cdn/shop/products/12-1536x1024.jpg?v=1642439392", count: 78 },
+//   { id: 3, name: "Incense & Dhoop", image: "https://prokart.co/wp-content/uploads/2023/02/agarbattu1200-430x287.jpg", count: 32 },
+//   { id: 4, name: "Books & Scriptures", image: "https://rukminim2.flixcart.com/image/850/1000/l3929ow0/regionalbooks/b/a/f/shreemad-bhagwat-geeta-original-imageeufsk4ds57y.jpeg?q=90&crop=false", count: 56 },
+//   { id: 5, name: "Jewelry & Accessories", image: "https://m.media-amazon.com/images/I/41AqIMHThsL._AC_UF1000,1000_QL80_.jpg", count: 23 },
+//   { id: 6, name: "Home Decor", image: "https://www.mystore.in/s/62ea2c599d1398fa16dbae0a/66236a67f8ba13189d10eb7e/0010.JPG", count: 41 },
+// ]
 
 
 
@@ -72,11 +72,23 @@ const categories = [
 export default function Home() {
 
   const [featuredProds, setFeaturedProds] = useState<Product[]>()
-
+  const [categories, setCategories] = useState<{
+    productCount: number;
+    name: string;
+    id: number;
+    photoUrl: string | null;
+    parentId: number | null;
+}[]>([])
 
   useEffect(() => {
     async function fetchFeaturedProducts() {
       const res = await getFeaturedProducts(1)
+      const categoryres = await getCategories(6, 1)
+      if (!res || !categoryres) {
+        console.error("Failed to fetch products or categories")
+        return
+      }
+      setCategories(categoryres)
       setFeaturedProds(res)
       console.log(res)
     }
@@ -167,7 +179,7 @@ export default function Home() {
                     <CardContent className="p-6 text-center">
                       <div className="relative mb-4 h-52 flex items-center justify-center">
                         <img
-                          src={category.image || "/placeholder.svg"}
+                          src={category.photoUrl || "/placeholder.svg"}
                           alt={category.name}
                           width={120}
                           height={120}
@@ -177,7 +189,7 @@ export default function Home() {
                       <h3 className="font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
                         {category.name}
                       </h3>
-                      <p className="text-sm text-gray-500">{category.count} items</p>
+                      <p className="text-sm text-gray-500">{category.productCount} items</p>
                     </CardContent>
                   </Card>
                 </Link>
