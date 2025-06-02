@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { Star, Heart, Minus, Plus, Truck, Shield, RotateCcw } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, use } from "react"
 import { Button } from "@/components/ui/button"
